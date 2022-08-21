@@ -11,3 +11,9 @@ export const getProdBanner = (prodBanner) => {
         payload: prodBanner,
     }
 }
+export const getHomeBanner = (homeBanner) => {
+    return {
+        type: HomeActionTypes.GET_HOMEBANNER,
+        payload: homeBanner,
+    }
+}

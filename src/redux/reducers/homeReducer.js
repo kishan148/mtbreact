@@ -1,6 +1,8 @@
 import { HomeActionTypes } from "../contants/homeActionTypes";
 const initialState = {
-    sliders: []
+    sliders: [],
+    prodBanner: [],
+    homeBanner: [],
 }
 export const homeReducer = (state = initialState, { type, payload }) => {
     switch (type) {
@@ -9,6 +11,9 @@ export const homeReducer = (state = initialState, { type, payload }) => {
             break;
         case HomeActionTypes.GET_PRODUCTBANNER:
             return { ...state, prodBanner: payload };
+            break;
+        case HomeActionTypes.GET_HOMEBANNER:
+            return { ...state, homeBanner: payload };
             break;
         default:
             return state;
