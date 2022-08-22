@@ -2,7 +2,7 @@ import React, { useEffect, useState, memo } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import Slider from "react-slick";
 import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./home.css";
@@ -11,7 +11,9 @@ import { getAllSlider, getAllProductBanner, getAllHomeBanner } from '../../axios
 import { getSlider, getProdBanner, getHomeBanner } from '../../redux/actions/homeActions';
 
 function Home() {
-    const [SkeletonLoading, setSkeletonLoading] = useState({ slider: true, prodBanner: true, homeBanner: true });
+    const [sliderLoading, setSliderLoading] = useState(true);
+    const [prodBannerLoading, setProdBannerLoading] = useState(true);
+    const [homeBannerLoading, setHomeBannerLoading] = useState(true);
     const sliders = useSelector((state) => state.allHomeReducer.sliders);
     const productBanner = useSelector((state) => state.allHomeReducer.prodBanner);
     const homeBanner = useSelector((state) => state.allHomeReducer.homeBanner);
@@ -31,19 +33,59 @@ function Home() {
         slidesToScroll: 1,
         pauseOnHover: false,
     };
+    const newProductAndPopulerSettings = {
+        className: 'product-slider slick-dotted',
+        customPaging: function (i) {
+          return (
+            <a href='/#'>1</a>
+          );
+        },
+        arrows: true,
+        dots: true,
+        infinite: true,
+        autoplay: false,
+        fade: false,
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        pauseOnHover: false,
+        responsive: [{
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            infinite: true,
+            dots: true
+          }
+        }, {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+            dots: false
+          }
+        }, {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+        ]
+      };
     const dispatch = useDispatch();
 
     useEffect(() => {
         const resSliders = getAllSlider().then((res) => {
             dispatch(getSlider(res));
-            setSkeletonLoading({...SkeletonLoading, 'slider': false});
+            setSliderLoading(false);
         });
         const resProductBanner = getAllProductBanner().then((res) => {
             dispatch(getProdBanner(res));
-            setSkeletonLoading({...SkeletonLoading, 'prodBanner': false});
+            setProdBannerLoading(false);
         });
         const resHomeBanner = getAllHomeBanner().then((res) => {
             dispatch(getHomeBanner(res));
+            setHomeBannerLoading(false);
         });
     }, []);
 
@@ -56,7 +98,7 @@ function Home() {
                     <div className="container-fluid">
                         <div className="h_btn">
                             <ul className="slides">
-                                {SkeletonLoading.slider && <Skeleton height={425} />}
+                                {sliderLoading && <Skeleton height={425} />}
                                 <Slider {...settings}>
                                     {sliders.map((items, key) => (
                                         <li key={key}>
@@ -79,14 +121,14 @@ function Home() {
             <div className="product_banner_info">
                 <div className="container">
                     <div className="row">
-                        {SkeletonLoading.prodBanner && 
+                        {prodBannerLoading &&
                             <>
-                            <div className="col-sm-4"><Skeleton height={149} /></div>
-                            <div className="col-sm-4"><Skeleton height={149} /></div>
-                            <div className="col-sm-4"><Skeleton height={149} /></div>
-                            <div className="col-sm-4"><Skeleton height={149} /></div>
-                            <div className="col-sm-4"><Skeleton height={149} /></div>
-                            <div className="col-sm-4"><Skeleton height={149} /></div>
+                                <div className="col-sm-4"><div className="product_banner_info_img"><Skeleton height={123} /></div></div>
+                                <div className="col-sm-4"><div className="product_banner_info_img"><Skeleton height={123} /></div></div>
+                                <div className="col-sm-4"><div className="product_banner_info_img"><Skeleton height={123} /></div></div>
+                                <div className="col-sm-4"><div className="product_banner_info_img"><Skeleton height={123} /></div></div>
+                                <div className="col-sm-4"><div className="product_banner_info_img"><Skeleton height={123} /></div></div>
+                                <div className="col-sm-4"><div className="product_banner_info_img"><Skeleton height={123} /></div></div>
                             </>
                         }
                         {(productBanner !== '') ?
@@ -111,6 +153,12 @@ function Home() {
             <div className="container">
                 <div className="home_banner_area">
                     <div className="row gutter_10">
+                        {homeBannerLoading &&
+                            <>
+                                <div className="col-sm-6"><Skeleton height={162} /></div>
+                                <div className="col-sm-6"><Skeleton height={162} /></div>
+                            </>
+                        }
                         {(homeBanner !== '') ?
                             homeBanner.map((items, key) => (
                                 <div key={key} className="col-sm-6">

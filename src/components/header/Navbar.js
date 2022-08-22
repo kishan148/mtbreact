@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import Skeleton from 'react-loading-skeleton'
 
 import logo from '../../assets/images/mountain_bike_logo.svg';
 import iconSearch from '../../assets/images/icon_search.svg';
@@ -9,14 +11,22 @@ import iconClosesm from '../../assets/images/icon_close_sm.png';
 import iconLoading from '../../assets/images/loading.gif';
 import iconSerClose from '../../assets/images/icon_search_close.png';
 
+import { getAllMenu } from '../../axios/headerApi';
+import { getMenu } from '../../redux/actions/headerActions';
+
 export default function Navbar() {
-
+    const dispatch = useDispatch();
     const [isActive, setIsActive] = useState({});
+    const [menuLoading, setMenuLoading] = useState(true);
+    const menuLevel = useSelector((state) => state.allHeaderReducer.menu);
 
-    //const [menuLevel, setMenuLevel] = useState({});
-    const menuLevel = [];
     const [manuBrand, setManuBrand] = useState('');
     useEffect(() => {
+        const resSliders = getAllMenu().then((res) => {
+            dispatch(getMenu(res));
+            setMenuLoading(false);
+            console.log(res);
+        });
         //API menu
         // axios({
         //   method: 'get',
@@ -189,84 +199,11 @@ export default function Navbar() {
                                         </div>
                                         <div id="navbar" className="collapse navbar-collapse padding-null-x">
                                             <ul className="nav navbar-nav desktop_menu">
-                                                {(menuLevel.level1) ?
-                                                    menuLevel.level1.map((items, key) => (
+                                                {(menuLevel.level_1) ?
+                                                    menuLevel.level_1.map((items, key) => (
                                                         <li key={key} className="megamenu main_category">
                                                             <a href="/#" title={items.name} className="sub_cat">{items.name}</a>
                                                             {/* sub category 1 */}
-                                                            {(menuLevel.level2[items.id] !== '' && menuLevel.level2.hasOwnProperty(items.id) === true) ?
-                                                                <div role="menu" className="dropdown-megamenu fullwidth menu_height">
-                                                                    <div className="row">
-                                                                        <div className="megamenu-widget megamenu_title col-sm-4" id={'megamenu_title__' + items.id}>
-                                                                            <div className="head_menu_banner">
-                                                                                <div className="call_popular_cat_area">
-                                                                                    {/* sub category 1 loop */}
-                                                                                    {menuLevel.level2[items.id].map((subitems1, subkey1) => (
-                                                                                        <div key={subkey1} className="call_head_menu_banner" onMouseOver={e => openSubCategory(subkey1)} onClick={e => openSubCategory(subkey1)}>
-                                                                                            <a id={'second_lvl_category__' + subitems1.id} className="pop_cate_h second_lvl_category" href="/#">
-                                                                                                <div className={isActive[subkey1] ? 'call_popular_cats child_categories activeImg active' : 'call_popular_cats child_categories'}>
-                                                                                                    <img alt={subitems1.name} src={subitems1.image} />
-                                                                                                    <h3>{subitems1.name}</h3>
-                                                                                                </div>
-                                                                                            </a>
-                                                                                        </div>
-                                                                                    ))}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="megamenu-widget megamenu_area col-sm-8" id={'megamenu_area__' + items.id}>
-                                                                            <div className="row">
-                                                                                {/* sub category 2 loop */}
-                                                                                {menuLevel.level2[items.id].map((subitems1, subkey1) => (
-                                                                                    <div key={subkey1} id={'child_category__' + subitems1.id} className="second_level_cat_area" style={{ display: isActive[subkey1] ? "block" : "none" }}>
-                                                                                        {(menuLevel.leve3[subitems1.id] !== '' && menuLevel.leve3[subitems1.id] !== 'undefined') ?
-                                                                                            <>
-                                                                                                <div className="third_level_category">
-                                                                                                    {menuLevel.level3[subitems1.id].map((subitems2, subkey2) => (
-                                                                                                        <div key={subkey2} className="col-sm-4">
-                                                                                                            <div className="top_nav_float">
-                                                                                                                <ul className="navlinks">
-                                                                                                                    {(menuLevel.level4[subitems2.id] === '') ?
-                                                                                                                        <a href="/#"><h4>{subitems2.name}</h4></a>
-                                                                                                                        :
-                                                                                                                        <>
-                                                                                                                            <h4 className="fourth_level_cat">{subitems2.name}</h4>
-                                                                                                                            {/* sub category 3 loop */}
-                                                                                                                            {menuLevel.level4[subitems2.id].map((subitems3, subkey3) => (
-                                                                                                                                <li key={subkey3}><a href="/#">{subitems3.name}</a></li>
-                                                                                                                            ))}
-                                                                                                                        </>
-                                                                                                                    }
-                                                                                                                </ul>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    ))}
-                                                                                                </div>
-                                                                                                <div className="clearfix"></div>
-                                                                                                {/* Menu Brand Logos at end of menu */}
-                                                                                                <div className="menu_brand_logo">
-                                                                                                    {/* menu brand logo loop */}
-                                                                                                    {(manuBrand !== '') ?
-                                                                                                        manuBrand.map((items, key) => (
-                                                                                                            <div key={key} className="col-sm-2">
-                                                                                                                <div className="menu_brand_logo_img">
-                                                                                                                    <a href={items.linkUrl} title={items.name}>
-                                                                                                                        <img src={items.image} alt={items.name} title={items.name} />
-                                                                                                                    </a>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        )) : null}
-                                                                                                </div>
-                                                                                            </>
-                                                                                            : null}
-                                                                                    </div>
-                                                                                ))}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                : null
-                                                            }
                                                         </li>
                                                     )) : null
                                                 }

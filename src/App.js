@@ -1,22 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { Routes, Route, Link } from "react-router-dom";
+import React from 'react'
 import Header from './components/header/Header';
 import Home from './pages/home/Home';
 import Footer from './components/footer/Footer';
+import "./config/apiPath";
 
-// import { getAllSlider } from './axios/homeApi';
-// import { useDispatch } from 'react-redux';
-
-// import { getSlider } from './redux/actions/homeActions';
+import 'react-loading-skeleton/dist/skeleton.css'
 
 function App() {
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   const resSliders = getAllSlider().then((res) => {
-  //     dispatch(getSlider(res));
-  //   });
-  // }, []);
 
   return (
     <div className="App">
