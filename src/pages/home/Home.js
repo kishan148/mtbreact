@@ -14,9 +14,12 @@ function Home() {
     const [sliderLoading, setSliderLoading] = useState(true);
     const [prodBannerLoading, setProdBannerLoading] = useState(true);
     const [homeBannerLoading, setHomeBannerLoading] = useState(true);
-    const sliders = useSelector((state) => state.allHomeReducer.sliders);
-    const productBanner = useSelector((state) => state.allHomeReducer.prodBanner);
-    const homeBanner = useSelector((state) => state.allHomeReducer.homeBanner);
+    //const sliders = useSelector((state) => state.allHomeReducer.sliders);
+    //const productBanner = useSelector((state) => state.allHomeReducer.prodBanner);
+    //const homeBanner = useSelector((state) => state.allHomeReducer.homeBanner);
+    const [sliders, setSliders] = useState('');
+    const [productBanner, setProductBanner] = useState('');
+    const [homeBanner, setHomeBanner] = useState('');
     const settings = {
         customPaging: function (i) {
             return (
@@ -75,16 +78,19 @@ function Home() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const resSliders = getAllSlider().then((res) => {
-            dispatch(getSlider(res));
+        getAllSlider().then((res) => {
+            //dispatch(getSlider(res));
+            setSliders(res);
             setSliderLoading(false);
         });
-        const resProductBanner = getAllProductBanner().then((res) => {
-            dispatch(getProdBanner(res));
+        getAllProductBanner().then((res) => {
+            //dispatch(getProdBanner(res));
+            setProductBanner(res);
             setProdBannerLoading(false);
         });
-        const resHomeBanner = getAllHomeBanner().then((res) => {
-            dispatch(getHomeBanner(res));
+        getAllHomeBanner().then((res) => {
+            //dispatch(getHomeBanner(res));
+            setHomeBanner(res);
             setHomeBannerLoading(false);
         });
     }, []);
@@ -93,12 +99,12 @@ function Home() {
     return (
         <>
             <div className="clearfix"></div>
+            {sliderLoading && <Skeleton height={425} />}
             {(sliders !== '') ?
                 <div className="slider_area wow fadeInUp animated animated animated">
                     <div className="container-fluid">
                         <div className="h_btn">
                             <ul className="slides">
-                                {sliderLoading && <Skeleton height={425} />}
                                 <Slider {...settings}>
                                     {sliders.map((items, key) => (
                                         <li key={key}>
