@@ -13,3 +13,8 @@ export const getAllHomeBanner = async () => {
     const returnData = await axios.get('homeBannerApi').catch((err) => { console.log("Err:", err) });
     return returnData.data;
 }
+export const getHomeManufacturer = async () => {
+    const returnData = await axios.get('getHomeManufacturerApi').catch((err) => { console.log("Err:", err) });
+    return returnData.data;
+}
+
