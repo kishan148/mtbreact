@@ -17,4 +17,8 @@ export const getHomeManufacturer = async () => {
     const returnData = await axios.get('getHomeManufacturerApi').catch((err) => { console.log("Err:", err) });
     return returnData.data;
 }
+export const getNewProducts = async () => {
+    const returnData = await axios.get('getNewProductsApi').catch((err) => { console.log("Err:", err) });
+    return returnData.data;
+}
 

@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./home.css";
 
-import { getAllSlider, getAllProductBanner, getAllHomeBanner, getHomeManufacturer } from '../../axios/homeApi';
+import { getAllSlider, getAllProductBanner, getAllHomeBanner, getHomeManufacturer, getNewProducts } from '../../axios/homeApi';
 import { getSlider, getProdBanner, getHomeBanner } from '../../redux/actions/homeActions';
 
 function Home() {
@@ -16,6 +16,7 @@ function Home() {
     const [prodBannerLoading, setProdBannerLoading] = useState(true);
     const [homeBannerLoading, setHomeBannerLoading] = useState(true);
     const [homeManufacturerLoading, setHomeManufacturerLoading] = useState(true);
+    const [newProductsLoading, setNewProductsLoading] = useState(true);
     //const sliders = useSelector((state) => state.allHomeReducer.sliders);
     //const productBanner = useSelector((state) => state.allHomeReducer.prodBanner);
     //const homeBanner = useSelector((state) => state.allHomeReducer.homeBanner);
@@ -23,6 +24,7 @@ function Home() {
     const [productBanner, setProductBanner] = useState('');
     const [homeBanner, setHomeBanner] = useState('');
     const [homeManufacturer, setHomeManufacturer] = useState('');
+    const [newProducts, setNewProducts] = useState('');
     const settings = {
         customPaging: function (i) {
             return (
@@ -120,71 +122,26 @@ function Home() {
 
     useEffect(() => {
         getAllSlider().then((res) => {
-            //dispatch(getSlider(res));
             setSliders(res);
             setSliderLoading(false);
         });
         getAllProductBanner().then((res) => {
-            //dispatch(getProdBanner(res));
             setProductBanner(res);
             setProdBannerLoading(false);
         });
         getAllHomeBanner().then((res) => {
-            //dispatch(getHomeBanner(res));
             setHomeBanner(res);
             setHomeBannerLoading(false);
         });
         getHomeManufacturer().then((res) => {
-            //dispatch(getHomeBanner(res));
             setHomeManufacturer(res);
             setHomeManufacturerLoading(false);
         });
+        getNewProducts().then((res) => {
+            setNewProducts(res);
+            setNewProductsLoading(false);
+        });
     }, []);
-    const newProducts = [
-        {
-          'id': 1, 'brandName': 'Lezyne', 'brandImage': 'https://www.mountainbike-parts.ch/cache/2/8/6/6/2/28662325ac495ea1c4952fe75bab48aefbd1bb87.jpeg', 'itemsName': 'Femto Drive hinten Sicherheitsleuchte', 'itemImage': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg', 'images': [
-            { 'id': 1, 'image': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg' },
-            { 'id': 2, 'image': 'https://www.mountainbike-parts.ch/cache/5/b/6/e/1/5b6e1af8590acab0b68fe93664da0bb1222881ae.jpeg' },
-            { 'id': 3, 'image': 'https://www.mountainbike-parts.ch/cache/8/7/8/3/0/87830ac66f742e043c1e2f870e2c78ac4a8741a5.jpeg' },
-          ], 'price': '13.90', 'stockIndicator': 'morgen geliefert', 'isChild': '1', 'comanAttributes': 'Rückleuchte, schwarz', 'link': '#', 'isInWhish': '0'
-        }, {
-          'id': 2, 'brandName': 'Lezyne', 'brandImage': 'https://www.mountainbike-parts.ch/cache/2/8/6/6/2/28662325ac495ea1c4952fe75bab48aefbd1bb87.jpeg', 'itemsName': 'Femto Drive hinten Sicherheitsleuchte', 'itemImage': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg', 'images': [
-            { 'id': 1, 'image': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg' },
-            { 'id': 2, 'image': 'https://www.mountainbike-parts.ch/cache/5/b/6/e/1/5b6e1af8590acab0b68fe93664da0bb1222881ae.jpeg' },
-            { 'id': 3, 'image': 'https://www.mountainbike-parts.ch/cache/8/7/8/3/0/87830ac66f742e043c1e2f870e2c78ac4a8741a5.jpeg' },
-          ], 'price': '13.90', 'stockIndicator': 'morgen geliefert', 'isChild': '1', 'comanAttributes': 'Rückleuchte, schwarz', 'link': '#', 'isInWhish': '0'
-        }, {
-          'id': 3, 'brandName': 'Lezyne', 'brandImage': 'https://www.mountainbike-parts.ch/cache/2/8/6/6/2/28662325ac495ea1c4952fe75bab48aefbd1bb87.jpeg', 'itemsName': 'Femto Drive hinten Sicherheitsleuchte', 'itemImage': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg', 'images': [
-            { 'id': 1, 'image': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg' },
-            { 'id': 2, 'image': 'https://www.mountainbike-parts.ch/cache/5/b/6/e/1/5b6e1af8590acab0b68fe93664da0bb1222881ae.jpeg' },
-            { 'id': 3, 'image': 'https://www.mountainbike-parts.ch/cache/8/7/8/3/0/87830ac66f742e043c1e2f870e2c78ac4a8741a5.jpeg' },
-          ], 'price': '13.90', 'stockIndicator': 'morgen geliefert', 'isChild': '1', 'comanAttributes': 'Rückleuchte, schwarz', 'link': '#', 'isInWhish': '0'
-        }, {
-          'id': 4, 'brandName': 'Lezyne', 'brandImage': 'https://www.mountainbike-parts.ch/cache/2/8/6/6/2/28662325ac495ea1c4952fe75bab48aefbd1bb87.jpeg', 'itemsName': 'Femto Drive hinten Sicherheitsleuchte', 'itemImage': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg', 'images': [
-            { 'id': 1, 'image': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg' },
-            { 'id': 2, 'image': 'https://www.mountainbike-parts.ch/cache/5/b/6/e/1/5b6e1af8590acab0b68fe93664da0bb1222881ae.jpeg' },
-            { 'id': 3, 'image': 'https://www.mountainbike-parts.ch/cache/8/7/8/3/0/87830ac66f742e043c1e2f870e2c78ac4a8741a5.jpeg' },
-          ], 'price': '13.90', 'stockIndicator': 'morgen geliefert', 'isChild': '1', 'comanAttributes': 'Rückleuchte, schwarz', 'link': '#', 'isInWhish': '0'
-        }, {
-          'id': 5, 'brandName': 'Lezyne', 'brandImage': 'https://www.mountainbike-parts.ch/cache/2/8/6/6/2/28662325ac495ea1c4952fe75bab48aefbd1bb87.jpeg', 'itemsName': 'Femto Drive hinten Sicherheitsleuchte', 'itemImage': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg', 'images': [
-            { 'id': 1, 'image': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg' },
-            { 'id': 2, 'image': 'https://www.mountainbike-parts.ch/cache/5/b/6/e/1/5b6e1af8590acab0b68fe93664da0bb1222881ae.jpeg' },
-            { 'id': 3, 'image': 'https://www.mountainbike-parts.ch/cache/8/7/8/3/0/87830ac66f742e043c1e2f870e2c78ac4a8741a5.jpeg' },
-          ], 'price': '13.90', 'stockIndicator': 'morgen geliefert', 'isChild': '1', 'comanAttributes': 'Rückleuchte, schwarz', 'link': '#', 'isInWhish': '0'
-        }, {
-          'id': 6, 'brandName': 'Lezyne', 'brandImage': 'https://www.mountainbike-parts.ch/cache/2/8/6/6/2/28662325ac495ea1c4952fe75bab48aefbd1bb87.jpeg', 'itemsName': 'Femto Drive hinten Sicherheitsleuchte', 'itemImage': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg', 'images': [
-            { 'id': 1, 'image': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg' },
-            { 'id': 2, 'image': 'https://www.mountainbike-parts.ch/cache/5/b/6/e/1/5b6e1af8590acab0b68fe93664da0bb1222881ae.jpeg' },
-            { 'id': 3, 'image': 'https://www.mountainbike-parts.ch/cache/8/7/8/3/0/87830ac66f742e043c1e2f870e2c78ac4a8741a5.jpeg' },
-          ], 'price': '13.90', 'stockIndicator': 'morgen geliefert', 'isChild': '1', 'comanAttributes': 'Rückleuchte, schwarz', 'link': '#', 'isInWhish': '0'
-        }, {
-          'id': 7, 'brandName': 'Lezyne', 'brandImage': 'https://www.mountainbike-parts.ch/cache/2/8/6/6/2/28662325ac495ea1c4952fe75bab48aefbd1bb87.jpeg', 'itemsName': 'Femto Drive hinten Sicherheitsleuchte', 'itemImage': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg', 'images': [
-            { 'id': 1, 'image': 'https://www.mountainbike-parts.ch/cache/e/a/d/7/0/ead70639d7e20c1773161574731f76c60ee3d51a.jpeg' },
-            { 'id': 2, 'image': 'https://www.mountainbike-parts.ch/cache/5/b/6/e/1/5b6e1af8590acab0b68fe93664da0bb1222881ae.jpeg' },
-            { 'id': 3, 'image': 'https://www.mountainbike-parts.ch/cache/8/7/8/3/0/87830ac66f742e043c1e2f870e2c78ac4a8741a5.jpeg' },
-          ], 'price': '13.90', 'stockIndicator': 'morgen geliefert', 'isChild': '1', 'comanAttributes': 'Rückleuchte, schwarz', 'link': '#', 'isInWhish': '0'
-        },
-      ];
 
     return (
         <>
@@ -288,15 +245,44 @@ function Home() {
                             </div>
                         </div>
                         <div className="clearfix"></div>
-                        <Slider {...newProductAndPopulerSettings}>
-                            {newProducts.map((items, key) => (
-                                <div key={key} className="item">
-                                    <div className="col-sm-12">
-                                        <GridViewItem data={items} />
+                        <>
+                            {newProductsLoading && Array(1, 2, 3, 4).map((items, key) => (
+                                <div key={key} className='col-sm-3'>
+                                    <div className="call_new_product_box2">
+                                        <div className="call_new_product_box_brand_img flex-start-justy">
+                                            <Skeleton width={100} height={40} />
+                                            <Skeleton width={14} height={20} />
+                                        </div>
+                                        <div className="call_new_product_box_img switch_pro_img">
+                                            <Skeleton width={202} height={200} />
+                                        </div>
+                                        <div className="call_new_product_box_title">
+                                            <a href="/#"><h2><Skeleton width={80} height={21} /></h2></a>
+                                            <div className="pro_show_cont">
+                                                <Skeleton width={190} height={21} />
+                                            </div>
+                                            <div className="rating_star min23"></div>
+                                            <div className="hr"></div>
+                                            <div className="price_txt new_prod_page">
+                                                <Skeleton width={80} height={21} />
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
                             ))}
-                        </Slider>
+                        </>
+                        {(newProducts !== '') ?
+                            <Slider {...newProductAndPopulerSettings}>
+                                {Object.values(newProducts).map((items, key) => (
+                                    <div key={key} className="item">
+                                        <div className="col-sm-12">
+                                            <GridViewItem data={items} />
+                                        </div>
+                                    </div>
+                                ))}
+                            </Slider>
+                            : null}
                     </div>
                     <div className="hr"></div>
                 </div>
@@ -311,7 +297,34 @@ function Home() {
                             </div>
                         </div>
                         <div className="clearfix"></div>
-                        <Slider {...newProductAndPopulerSettings}>
+                        <>
+                            {Array(1, 2, 3, 4).map((items, key) => (
+                                <div key={key} className='col-sm-3'>
+                                    <div className="call_new_product_box2">
+                                        <div className="call_new_product_box_brand_img flex-start-justy">
+                                            <Skeleton width={100} height={40} />
+                                            <Skeleton width={14} height={20} />
+                                        </div>
+                                        <div className="call_new_product_box_img switch_pro_img">
+                                            <Skeleton width={202} height={200} />
+                                        </div>
+                                        <div className="call_new_product_box_title">
+                                            <a href="/#"><h2><Skeleton width={80} height={21} /></h2></a>
+                                            <div className="pro_show_cont">
+                                                <Skeleton width={190} height={21} />
+                                            </div>
+                                            <div className="rating_star min23"></div>
+                                            <div className="hr"></div>
+                                            <div className="price_txt new_prod_page">
+                                                <Skeleton width={80} height={21} />
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                        {/* <Slider {...newProductAndPopulerSettings}>
                             {newProducts.map((items, key) => (
                                 <div key={key} className="item">
                                     <div className="col-sm-12">
@@ -319,7 +332,7 @@ function Home() {
                                     </div>
                                 </div>
                             ))}
-                        </Slider>
+                        </Slider> */}
                     </div>
                     <div className="hr"></div>
                 </div>
@@ -338,10 +351,14 @@ function Home() {
                         <div className="call_our_partner_area">
                             <div id="our_partner_area">
                                 {homeManufacturerLoading &&
-                                    <>
-                                        <div className="col-sm-6"><Skeleton height={162} /></div>
-                                        <div className="col-sm-6"><Skeleton height={162} /></div>
-                                    </>
+                                    <div className="our_partner_logos">
+                                        <div className="col-sm-2"><Skeleton height={65} /></div>
+                                        <div className="col-sm-2"><Skeleton height={65} /></div>
+                                        <div className="col-sm-2"><Skeleton height={65} /></div>
+                                        <div className="col-sm-2"><Skeleton height={65} /></div>
+                                        <div className="col-sm-2"><Skeleton height={65} /></div>
+                                        <div className="col-sm-2"><Skeleton height={65} /></div>
+                                    </div>
                                 }
                                 <Slider {...homeBrandSettings}>
                                     {(homeManufacturer !== '') ?

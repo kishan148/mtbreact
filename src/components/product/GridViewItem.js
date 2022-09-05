@@ -4,17 +4,17 @@ export const GridViewItem = (props) => {
     const data = props.data;
     return (
         <div className="call_new_product_box2">
-            <div className="call_new_product_box_brand_img">
-                <a href="/#"><img src={data.brandImage} alt={data.brandName} title={data.brandName} /></a>
-                <a href="/#" data-toggle="loginRegisterModal" data-target="modal__title-st1-35mm-vorbau-p-11658" className="wishlist_effect pad_rightset modal_login"><span className="wishlist_heart"></span></a>
+            <div className="call_new_product_box_brand_img flex-start-justy">
+                <a href={data.seoUrl}><img src={data.brandImage} alt={data.brandName} title={data.brandName} /></a>
+                <span class="ind_color_green"><i class="bi bi-check-circle-fill"></i></span>
             </div>
             <div className="call_new_product_box_img switch_pro_img">
-                <a href="/#"><img src={data.itemImage} alt={data.itemsName} title={data.itemsName} /></a>
+                <a href={data.seoUrl}><img src={data.itemImage} alt={data.itemsName} title={data.itemsName} /></a>
             </div>
             <div className="call_new_product_box_title">
-                <a href="/#"><h2>{data.brandName}</h2></a>
+                <a href={data.seoUrl}><h2>{data.brandName}</h2></a>
                 <div className="pro_show_cont">
-                    <a href="/#"><h4 className="min29">{data.itemsName}</h4></a>
+                    <a href={data.seoUrl}><h4 className="min29">{data.itemsName}</h4></a>
                 </div>
                 <div className="rating_star min23">
                 </div>
@@ -43,7 +43,7 @@ export const GridViewItem = (props) => {
                             </div>
                         </div>
                         <div className="col-sm-8 paddfix5 simple_addtocart_box">
-                            <a href="/#" id="" className="btn btn-success btn-block add_cart"> Warenkorb</a>
+                            <button className="btn btn-success btn-block add_cart"> Warenkorb</button>
                         </div>
                     </div>
                 </div>
