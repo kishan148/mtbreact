@@ -1,1 +1,49 @@
-.navi .navbar-default .navbar-nav>li>a {font-weight: 600 !important;}
+.is-sticky #header {
+    position: fixed;
+    top: 0px;
+}
+
+.navi .navbar-default .navbar-nav>li>button {
+    font-family: 'DINPro';
+    font-size: 14px;
+    font-weight: 500;
+    color: #3f3f3f;
+    text-transform: uppercase;
+    border-bottom: 2px solid transparent;
+    padding: 24px 10px 15px;
+    line-height: 38px;
+    background-color: transparent;
+    position: relative;
+    display: block;
+    text-decoration: none;
+    transition: all ease 0.5s;
+}
+
+.navi .navbar-default .navbar-nav>li>button:hover,
+.navbar-default .navbar-nav>li>button:focus {
+    background-color: transparent;
+    color: #f68520;
+    border-bottom: 2px solid #f68520;
+}
+
+.navi .nav>li>button:hover::before,
+.navi .nav>li>button:hover::after,
+.navi .nav>li>button:focus::before,
+.navi .nav>li>button:focus::after,
+.navi .nav>li>button.active::before,
+.navi .nav>li>button.active::after {
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #f68520;
+    content: "";
+    display: inline-block;
+    left: 45%;
+    position: absolute;
+    top: 79px;
+    z-index: 9000;
+}
+
+.navi .navbar-nav > li > label {
+    line-height: 38px;
+}
+.cursor-pointer{cursor: pointer;}

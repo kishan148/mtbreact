@@ -6,7 +6,7 @@ export const GridViewItem = (props) => {
         <div className="call_new_product_box2">
             <div className="call_new_product_box_brand_img flex-start-justy">
                 <a href={data.seoUrl}><img src={data.brandImage} alt={data.brandName} title={data.brandName} /></a>
-                <span class="ind_color_green"><i class="bi bi-check-circle-fill"></i></span>
+                <span className="ind_color_green"><i className="bi bi-check-circle-fill"></i></span>
             </div>
             <div className="call_new_product_box_img switch_pro_img">
                 <a href={data.seoUrl}><img src={data.itemImage} alt={data.itemsName} title={data.itemsName} /></a>

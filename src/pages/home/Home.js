@@ -51,6 +51,7 @@ function Home() {
         arrows: true,
         dots: true,
         infinite: true,
+        speed: 300,
         autoplay: false,
         fade: false,
         slidesToShow: 4,
@@ -58,25 +59,25 @@ function Home() {
         pauseOnHover: false,
         responsive: [{
             breakpoint: 1024,
-            settings: {
-                slidesToShow: 3,
-                slidesToScroll: 3,
-                infinite: true,
-                dots: true
-            }
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true
+                }
         }, {
             breakpoint: 600,
-            settings: {
-                slidesToShow: 2,
-                slidesToScroll: 2,
-                dots: false
-            }
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    dots: false
+                }
         }, {
             breakpoint: 480,
-            settings: {
-                slidesToShow: 1,
-                slidesToScroll: 1
-            }
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
         }
         ]
     };
@@ -266,7 +267,6 @@ function Home() {
                                             <div className="price_txt new_prod_page">
                                                 <Skeleton width={80} height={21} />
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -318,7 +318,6 @@ function Home() {
                                             <div className="price_txt new_prod_page">
                                                 <Skeleton width={80} height={21} />
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -363,7 +362,7 @@ function Home() {
                                 <Slider {...homeBrandSettings}>
                                     {(homeManufacturer !== '') ?
                                         homeManufacturer.map((items, key) => (
-                                            <a href={items.seoUrl}>
+                                            <a key={key} href={items.seoUrl}>
                                                 <div className="item">
                                                     <div className="our_partner_logos">
                                                         <div className="col-sm-12">

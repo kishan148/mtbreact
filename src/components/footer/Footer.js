@@ -1,4 +1,5 @@
 import React,{memo} from 'react'
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
     return (
@@ -50,6 +51,7 @@ const Footer = () => {
                                                                     </address>
                                                                 </div>
                                                                 <div className="contact-link">
+                                                                    <Link to="/contact-us" >Kontaktaufnahme</Link>
                                                                     <a href="/#" title="Kontaktaufnahme">Kontaktaufnahme</a>
                                                                 </div>
                                                                 <div className="rating-badge"></div>

@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import Skeleton from 'react-loading-skeleton'
+import { Link } from 'react-router-dom'
+
 
 import logo from '../../assets/images/mountain_bike_logo.svg';
 import iconSearch from '../../assets/images/icon_search.svg';
@@ -21,27 +23,41 @@ export default function Navbar() {
     //const categoryMenu = useSelector((state) => state.allHeaderReducer.menu);
     const [categoryMenu, setCategoryMenu] = useState('');
     const [manuBrand, setManuBrand] = useState('');
-    let allActiveBrand = [];
-    let allinActiveBrand = [];
+    //let allActiveBrand = [];
+    //let allinActiveBrand = [];
+    const [allActiveBrand, setAllActiveBrand] = useState('');
     const [activeBrandFilter, setActiveBrandFilter] = useState('');
+    const [allinActiveBrand, setAllinActiveBrand] = useState('');
     const [inactiveBrandFilter, setinActiveBrandFilter] = useState('');
-    function callActiveAndInactiveApi(){
-        getMenuActiveAndInactiveBrand().then((res) => { 
-            let allActiveBrand = Object.values(res.active);
-            setActiveBrandFilter(allActiveBrand);
-            let allinActiveBrand = Object.values(res.inactive);
-            setinActiveBrandFilter(allinActiveBrand);
-        });
-    }
+    const [stickyClass, setStickyClass] = useState('');
     useEffect(() => {
         getAllMenu().then((res) => {
             //dispatch(getMenu(res));
             setCategoryMenu(res)
             setMenuLoading(false);
+            let lvitem = {};
+            let art = Object.values(res).map((items) => (lvitem[items.id] = 0))
+            setIsActive(lvitem);
         });
         getMenuBrand().then((res) => { setManuBrand(res) });
-        callActiveAndInactiveApi();
+        getMenuActiveAndInactiveBrand().then((res) => {
+            let allActiveBrand11 = Object.values(res.active);
+            setActiveBrandFilter(allActiveBrand11);
+            setAllActiveBrand(allActiveBrand11);
+            let allinActiveBrand = Object.values(res.inactive);
+            setinActiveBrandFilter(allinActiveBrand);
+            setAllinActiveBrand(allinActiveBrand);
+        });
+        window.addEventListener('scroll', stickNavbar);
+        return () => window.removeEventListener('scroll', stickNavbar);
     }, []);
+
+    const stickNavbar = () => {
+        if (window !== undefined) {
+            let windowHeight = window.scrollY;
+            windowHeight > 30 ? setStickyClass('is-sticky') : setStickyClass('');
+        }
+    };
 
 
     const searchProducts = [
@@ -57,8 +73,8 @@ export default function Navbar() {
         { 'id': 10, 'name': 'Kool Stop SRAM Guide/G2 D293S Bremsbeläge', 'image': 'https://www.mountainbike-parts.ch/cache/9/9/9/d/e/999de240c451367175fd60de8667c9536f2a6bf0.jpeg', 'price': '79.25', 'link': '#' },
     ]
 
-    function openSubCategory(subkey1) {
-        setIsActive({ [subkey1]: true });
+    function openSubCategory(lvl, subkey1) {
+        setIsActive({ ...isActive, [lvl]: subkey1 });
     }
 
     /* Brand Filter Aria */
@@ -66,12 +82,12 @@ export default function Navbar() {
     const activeFilter = (e) => {
         const filterTxt = e.target.value;
         if (filterTxt !== '') {
-            const result = activeBrandFilter.filter((brand) => {
+            const result = allActiveBrand.filter((brand) => {
                 return brand.name.toLowerCase().startsWith(filterTxt.toLowerCase());
             });
             setActiveBrandFilter(result);
         } else {
-            callActiveAndInactiveApi();
+            setActiveBrandFilter(allActiveBrand);
         }
         setActiveBrand(filterTxt);
     }
@@ -83,19 +99,19 @@ export default function Navbar() {
         setisActiveBrandActive(!isActiveBrandActive);
         if (isActiveBrandActive === false) {
             setinActiveBrand('');
-            callActiveAndInactiveApi();
+            setinActiveBrandFilter(allinActiveBrand);
         }
     }
 
     const inactiveFilter = (e) => {
         const filterTxt = e.target.value;
         if (filterTxt !== '') {
-            const result = inactiveBrandFilter.filter((brand) => {
+            const result = allinActiveBrand.filter((brand) => {
                 return brand.name.toLowerCase().startsWith(filterTxt.toLowerCase());
             });
             setinActiveBrandFilter(result);
         } else {
-            callActiveAndInactiveApi();
+            setinActiveBrandFilter(allinActiveBrand);
         }
         setinActiveBrand(filterTxt);
     }
@@ -140,7 +156,7 @@ export default function Navbar() {
     /* Login Popup */
     return (
         <div id="header-sticky-wrapper" className="sticky-wrapper" style={{ height: '80px' }}>
-            <div id="header-sticky-wrapper" className="sticky-wrapper" style={{ height: '80px' }}>
+            <div id="header-sticky-wrapper" className={`sticky-wrapper ${stickyClass}`} style={{ height: '80px' }}>
                 <header id="header">
                     <div className="container">
                         <div className="row">
@@ -156,9 +172,7 @@ export default function Navbar() {
                                                 <span className="icon-bar"></span>
                                                 <span className="menu_nav_text">Menu</span>
                                             </button>
-                                            <a className="logo" href="/#">
-                                                <img src={logo} alt="Willkommen bei mountainbike-parts.ch" title="Willkommen bei mountainbike-parts.ch" height="52" />
-                                            </a>
+                                            <Link className="logo" to="/" ><img src={logo} alt="Willkommen bei mountainbike-parts.ch" title="Willkommen bei mountainbike-parts.ch" height="52" /></Link>
                                         </div>
                                         <div id="navbar" className="collapse navbar-collapse padding-null-x">
                                             <ul className="nav navbar-nav desktop_menu">
@@ -175,7 +189,7 @@ export default function Navbar() {
                                                     Object.values(categoryMenu).sort((a, b) => a.sortOrder > b.sortOrder ? 1 : -1).map((items, key) => {
                                                         return (
                                                             <li key={key} className="megamenu main_category">
-                                                                <a href={items.seoUrl} title={items.name} className="sub_cat">{items.name}</a>
+                                                                <Link to={"/c/" + items.seoUrl} className="sub_cat">{items.name}</Link>
                                                                 {/* sub category 1 */}
                                                                 {(items.child !== '') ?
                                                                     <div role="menu" className="dropdown-megamenu fullwidth menu_height">
@@ -185,13 +199,13 @@ export default function Navbar() {
                                                                                     <div className="call_popular_cat_area">
                                                                                         {/* sub category 1 loop */}
                                                                                         {Object.values(items.child).sort((a, b) => a.sortOrder > b.sortOrder ? 1 : -1).map((subitems1, subkey1) => (
-                                                                                            <div key={subkey1} className="call_head_menu_banner" onMouseOver={e => openSubCategory(subkey1)} onClick={e => openSubCategory(subkey1)}>
-                                                                                                <a id={'second_lvl_category__' + subitems1.id} className="pop_cate_h second_lvl_category" href={subitems1.seoUrl}>
-                                                                                                    <div className={isActive[subkey1] ? 'call_popular_cats child_categories activeImg active' : 'call_popular_cats child_categories'}>
+                                                                                            <div key={subkey1} className="call_head_menu_banner" onMouseOver={e => openSubCategory(items.id, subkey1)}>
+                                                                                                <Link to={"/c/" + subitems1.seoUrl} id={'second_lvl_category__' + subitems1.id} className="pop_cate_h second_lvl_category">
+                                                                                                    <div className={isActive[items.id] == subkey1 ? 'call_popular_cats child_categories activeImg active' : 'call_popular_cats child_categories'}>
                                                                                                         <img alt={subitems1.name} src={subitems1.image} style={{ height: "33px" }} />
                                                                                                         <h3>{subitems1.name}</h3>
                                                                                                     </div>
-                                                                                                </a>
+                                                                                                </Link>
                                                                                             </div>
                                                                                         ))}
                                                                                     </div>
@@ -201,7 +215,7 @@ export default function Navbar() {
                                                                                 <div className="row">
                                                                                     {/* sub category 2 loop */}
                                                                                     {Object.values(items.child).sort((a, b) => a.sortOrder > b.sortOrder ? 1 : -1).map((subitems1, subkey1) => (
-                                                                                        <div key={subkey1} id={'child_category__' + subitems1.id} className="second_level_cat_area" style={{ display: isActive[subkey1] || subkey1 == 0 ? "block" : "none" }}>
+                                                                                        <div key={subkey1} id={'child_category__' + subitems1.id} className="second_level_cat_area" style={{ display: isActive[items.id] == subkey1 ? "block" : "none" }}>
                                                                                             {(subitems1.child !== '') ?
                                                                                                 <>
                                                                                                     <div className="third_level_category">
@@ -210,13 +224,13 @@ export default function Navbar() {
                                                                                                                 <div className="top_nav_float">
                                                                                                                     <ul className="navlinks">
                                                                                                                         {(subitems2.child == '') ?
-                                                                                                                            <a href={subitems2.seoUrl}><h4>{subitems2.name}</h4></a>
+                                                                                                                            <Link to={"/c/" + subitems2.seoUrl}><h4>{subitems2.name}</h4></Link>
                                                                                                                             :
                                                                                                                             <>
                                                                                                                                 <h4 className="fourth_level_cat">{subitems2.name}</h4>
                                                                                                                                 {/* sub category 3 loop */}
                                                                                                                                 {Object.values(subitems2.child).sort((a, b) => a.sortOrder > b.sortOrder ? 1 : -1).map((subitems3, subkey3) => (
-                                                                                                                                    <li key={subkey3}><a href={subitems3.seoUrl}>{subitems3.name}</a></li>
+                                                                                                                                    <li key={subkey3}><Link to={"/c/" + subitems3.seoUrl}><h4>{subitems3.name}</h4></Link></li>
                                                                                                                                 ))}
                                                                                                                             </>
                                                                                                                         }
@@ -233,9 +247,9 @@ export default function Navbar() {
                                                                                                             manuBrand.map((items, key) => (
                                                                                                                 <div key={key} className="col-sm-2">
                                                                                                                     <div className="menu_brand_logo_img">
-                                                                                                                        <a href={items.seoUrl} title={items.name}>
+                                                                                                                        <Link to={"/b/" + items.seoUrl} title={items.name}>
                                                                                                                             <img src={items.image} alt={items.name} title={items.name} />
-                                                                                                                        </a>
+                                                                                                                        </Link>
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                             )) : null}
@@ -257,14 +271,15 @@ export default function Navbar() {
                                             </ul>
                                             <ul className="nav navbar-nav new_menu">
                                                 <li className="megamenu">
-                                                    <a href="/#" data-toggle="dropdown" className="dropdown-toggle brands">
+                                                    <button data-toggle="dropdown" className="btn btn-link dropdown-toggle brands">Marken</button>
+                                                    {/* <a href="/#" data-toggle="dropdown" className="dropdown-toggle brands">
                                                         Marken
-                                                    </a>
+                                                    </a> */}
                                                     <div role="menu" className="dropdown-megamenu fullwidth">
                                                         <div className="row">
-                                                            <div className="slimScrollDiv">
-                                                                <div className="megamenu-widget col-sm-12 manufacturer_tab_menu">
-                                                                    <h4 className="col-lg-3 width20per ma-b-30px">Unsere Top Brands</h4>
+                                                            <div className="slimScrollDiv" style={{ position: 'relative', overflow: 'hidden', height: '325px' }}>
+                                                                <div className="megamenu-widget col-sm-12 manufacturer_tab_menu" style={{ overflow: 'auto', height: '325px' }}>
+                                                                    <h4 className="col-lg-3 width20per ma-b-30px" style={{ paddingLeft: '0px' }}>Unsere Top Brands</h4>
                                                                     <div id="search_text_div" className="input-group width20per">
                                                                         <input type="text" className="form-control search_brand_text" placeholder="Marke suchen" value={activeBrand} onChange={activeFilter} autoFocus="" />
                                                                         <span className="input-group-addon search_this_brand">
@@ -275,11 +290,11 @@ export default function Navbar() {
                                                                     <ul className="navlinks fivecol" id="load_all_manufacturers">
                                                                         {(activeBrandFilter !== '') ?
                                                                             activeBrandFilter.map((items, key) => (
-                                                                                <li key={key}><a href={items.seoUrl}>{items.name}</a></li>
-                                                                        )) : null}
+                                                                                <li key={key}><Link to={"/b/" + items.seoUrl} title={items.name}>{items.name}</Link></li>
+                                                                            )) : null}
                                                                     </ul>
                                                                     <div className="clearfix"></div>
-                                                                    <a href="/#" className="show_all_inactive_brands ma-x-30px col-lg-3 width20per" onClick={inActiveBrandHandal} style={{ color: '#000', fontWeight: 'bold', paddingLeft: '0px', paddingRight: '0px' }}><i className={(isActiveBrandActive) ? 'fa fa-minus' : 'fa fa-plus'}></i> weitere Marken</a>
+                                                                    <label className="show_all_inactive_brands ma-x-30px col-lg-3 width20per cursor-pointer" onClick={inActiveBrandHandal} style={{ color: '#000', fontWeight: 'bold', paddingLeft: '0px', paddingRight: '0px'}}><i className={(isActiveBrandActive) ? 'fa fa-minus' : 'fa fa-plus'}></i> weitere Marken</label>
                                                                     <div id="search_inactive_text_div" className="input-group all_inactive_brands_div ma-x-20px width20per" style={{ display: (isActiveBrandActive) ? "" : "none" }}>
                                                                         <input type="text" className="col-lg-10 form-control search_inactive_brand_text" placeholder="Marke suchen" value={inactiveBrand} onChange={inactiveFilter} />
                                                                         <span className="input-group-addon search_inactive_this_brand"><span className="fa fa-search"></span></span>
@@ -287,10 +302,10 @@ export default function Navbar() {
                                                                     <div className="clearfix"></div>
                                                                     <div className="all_inactive_brands_div" style={{ display: (isActiveBrandActive) ? "block" : "none" }}>
                                                                         <ul className="navlinks fivecol" id="load_all_inactive_manufacturers">
-                                                                        {(inactiveBrandFilter !== '') ?
-                                                                            inactiveBrandFilter.map((items, key) => (
-                                                                                <li key={key}><a href={items.seoUrl}>{items.name}</a></li>
-                                                                            )) : null}
+                                                                            {(inactiveBrandFilter !== '') ?
+                                                                                inactiveBrandFilter.map((items, key) => (
+                                                                                    <li key={key}><Link to={"/b/" + items.seoUrl} title={items.name}>{items.name}</Link></li>
+                                                                                )) : null}
                                                                         </ul>
                                                                     </div>
                                                                 </div>
@@ -302,9 +317,9 @@ export default function Navbar() {
                                                                         manuBrand.map((items, key) => (
                                                                             <div key={key} className="col-sm-2">
                                                                                 <div className="menu_brand_logo_img">
-                                                                                    <a href={items.seoUrl} title={items.name}>
+                                                                                    <Link to={"/b/" + items.seoUrl} title={items.name}>
                                                                                         <img src={items.image} alt={items.name} title={items.name} />
-                                                                                    </a>
+                                                                                    </Link>
                                                                                 </div>
                                                                             </div>
                                                                         )) : null}
@@ -318,7 +333,8 @@ export default function Navbar() {
                                     </nav>
                                     <ul className="nav navbar-nav mob_navi head_icons_main">
                                         <li className="search">
-                                            <a href="/#" className="show_head_search dropdown-toggle pad_rightset" data-toggle="dropdown" onClick={searchHandaler} role="button" aria-expanded="false" title="Search"><img src={iconSearch} alt="search" height="23" /></a>
+                                            <label className="show_head_search dropdown-toggle pad_rightset cursor-pointer" data-toggle="dropdown" onClick={searchHandaler} role="button" aria-expanded="false" title="Search"><img src={iconSearch} alt="search" height="23" /></label>
+                                            {/* <a href="/#" className="show_head_search dropdown-toggle pad_rightset" data-toggle="dropdown" onClick={searchHandaler} role="button" aria-expanded="false" title="Search"><img src={iconSearch} alt="search" height="23" /></a> */}
                                             <div className="head_inp_search hide_head_search" style={{ display: (isActiveSearch) ? '' : "none" }}>
                                                 <div className="form-group has-success has-feedback">
                                                     <div className="input-group">
@@ -362,22 +378,20 @@ export default function Navbar() {
                                             </div>
                                         </li>
                                         <li className="dropdown hide_desktop_menu login_register open_drp ">
-                                            <a href="/#" onClick={() => { setisloginShow(true) }} className="dropdown-toggle pad_rightset modal_login" title="Deine Adresse">
+                                            <label onClick={() => { setisloginShow(true) }} className="dropdown-toggle pad_rightset modal_login cursor-pointer" title="Deine Adresse">
                                                 <img src={iconUser} alt="Deine Adresse" height="23" />
-                                            </a>
+                                            </label>
                                         </li>
                                         <li className="dropdown hide_desktop_menu login_register">
-                                            <a href="/#" onClick={() => { setisloginShow(true) }} data-toggle="headerLoginRegisterModal" className="dropdown-toggle pad_rightset modal_login" title="Wunschliste">
+                                            <label onClick={() => { setisloginShow(true) }} data-toggle="headerLoginRegisterModal" className="dropdown-toggle pad_rightset modal_login cursor-pointer" title="Wunschliste">
                                                 <img src={iconWish} alt="Wunschliste" height="23" />
-                                            </a>
+                                            </label>
                                         </li>
                                         <li className="dropdown open_drp">
-                                            <a href="/#" id="cart_dropdown" className="dropdown-toggle pad_rightset" data-toggle="dropdown" role="button" aria-expanded="false" title="Warenkorb">
+                                            <label id="cart_dropdown" className="dropdown-toggle pad_rightset cursor-pointer" data-toggle="dropdown" role="button" aria-expanded="false" title="Warenkorb">
                                                 <img src={iconCart} alt="Warenkorb" />
-                                            </a>
-                                            <span id="total_cart_products" className="cart_count_round orange" style={{ display: "none" }}>
-                                                0
-                                            </span>
+                                            </label>
+                                            <span id="total_cart_products" className="cart_count_round orange" style={{ display: "none" }}></span>
                                             <ul className="dropdown-menu dropdown-cart" role="menu">
                                                 <div className="drp_cart_heading">
                                                     <h4>
